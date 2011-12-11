@@ -16,8 +16,8 @@
 #include "train.h"
 
 int main(int argc, char** argv) {
-    train TGV_1, TGV_2, TGV_3;
-    pthread_t TGV_1_thread, TGV_2_thread, TGV_3_thread;
+    train TGV_1, GL_1, TGV_2;
+    pthread_t TGV_1_thread, GL_1_thread, TGV_2_thread;
     table *postes_aiguillages = postes_new();
 
     // Test d'un TGV OE
@@ -25,22 +25,22 @@ int main(int argc, char** argv) {
     TGV_1.direction = OE;
     TGV_1.postes = postes_aiguillages;
 
-    // Test d'un TGV EO
-    TGV_2.nom = "TGV 2";
-    TGV_2.direction = EO;
+    // Test d'un TGV OE (2)
+    TGV_2.nom = "TGV 3";
+    TGV_2.direction = OE;
     TGV_2.postes = postes_aiguillages;
 
-    // Test d'un TGV OE (2)
-    TGV_3.nom = "TGV 3";
-    TGV_3.direction = OE;
-    TGV_3.postes = postes_aiguillages;
+    // Test d'un GL OE
+    GL_1.nom = "GL 1";
+    GL_1.direction = OE;
+    GL_1.postes = postes_aiguillages;
 
     pthread_create(&TGV_1_thread, NULL, TGV_thread_fn, &TGV_1);
     pthread_create(&TGV_2_thread, NULL, TGV_thread_fn, &TGV_2);
-    pthread_create(&TGV_3_thread, NULL, TGV_thread_fn, &TGV_3);
+    pthread_create(&GL_1_thread, NULL, TGV_thread_fn, &GL_1);
     pthread_join(TGV_1_thread, NULL);
     pthread_join(TGV_2_thread, NULL);
-    pthread_join(TGV_3_thread, NULL);
+    pthread_join(GL_1_thread, NULL);
     
     postes_del(postes_aiguillages);
 
