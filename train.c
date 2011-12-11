@@ -161,9 +161,69 @@ void* M_thread_fn(void* arg) {
     train *M = (train*)arg;
     
     switch (M->direction) {
-        case EO:
-            break;
         case OE:
+            printf("%s - OE - P(Voie A)\n", M->nom);
+            sem_wait(table_get(table_get(M->postes, "P1"), "Voie A"));
+            
+            printf("%s - OE - P(Aiguillage 1)\n", M->nom);
+            pthread_mutex_lock(table_get(table_get(M->postes, "P1"), "Aiguillage 1"));
+            
+            printf("%s - OE - P(Ligne M - OE)\n", M->nom);
+            sem_wait(table_get(table_get(M->postes, "P1"), "Ligne M - OE"));
+            
+            printf("%s - OE - V(Voie A)\n", M->nom);
+            sem_post(table_get(table_get(M->postes, "P1"), "Voie A"));
+            
+            printf("%s - OE - V(Aiguillage 1)\n", M->nom);
+            pthread_mutex_unlock(table_get(table_get(M->postes, "P1"), "Aiguillage 1"));
+            
+            printf("%s - OE - P(Tunnel)\n", M->nom);
+            pthread_mutex_lock(table_get(table_get(M->postes, "P2"), "Tunnel"));
+            
+            printf("%s - OE - P(Ligne)\n", M->nom);
+            pthread_mutex_lock(table_get(table_get(M->postes, "P3"), "Ligne"));
+            
+            printf("%s - OE - V(Ligne M - OE)\n", M->nom);
+            sem_post(table_get(table_get(M->postes, "P1"), "Ligne M - OE"));   
+            
+            printf("%s - OE - V(Tunnel)\n", M->nom);
+            pthread_mutex_unlock(table_get(table_get(M->postes, "P2"), "Tunnel")); 
+            
+            printf("%s - OE - V(Ligne)\n", M->nom);
+            pthread_mutex_unlock(table_get(table_get(M->postes, "P3"), "Ligne"));
+            
+            break;
+        case EO:
+            printf("%s - EO - P(Ligne)\n", M->nom);
+            pthread_mutex_lock(table_get(table_get(M->postes, "P3"), "Ligne"));
+            
+            printf("%s - EO - P(Tunnel)\n", M->nom);
+            pthread_mutex_lock(table_get(table_get(M->postes, "P3"), "Tunnel"));
+            
+            printf("%s - EO - P(Ligne M - EO)\n", M->nom);
+            sem_wait(table_get(table_get(M->postes, "P2"), "Ligne M - EO"));
+            
+            printf("%s - EO - V(Ligne)\n", M->nom);
+            pthread_mutex_unlock(table_get(table_get(M->postes, "P3"), "Ligne"));
+            
+            printf("%s - EO - V(Tunnel)\n", M->nom);
+            pthread_mutex_unlock(table_get(table_get(M->postes, "P3"), "Tunnel"));
+            
+            printf("%s - EO - P(Aiguillage 1)\n", M->nom);
+            pthread_mutex_lock(table_get(table_get(M->postes, "P1"), "Aiguillage 1"));
+                        
+            printf("%s - EO - P(Voie B)\n", M->nom);
+            sem_wait(table_get(table_get(M->postes, "P1"), "Voie B"));
+            
+            printf("%s - EO - V(Ligne M - EO)\n", M->nom);
+            sem_post(table_get(table_get(M->postes, "P1"), "Ligne M - EO"));
+                                    
+            printf("%s - EO - V(Aiguillage 1)\n", M->nom);
+            pthread_mutex_unlock(table_get(table_get(M->postes, "P1"), "Aiguillage 1"));
+                                    
+            printf("%s - EO - V(Voie B)\n", M->nom);
+            sem_post(table_get(table_get(M->postes, "P1"), "Voie B"));
+            
             break;
         default:
             perror("Erreur : M - direction inconnu");

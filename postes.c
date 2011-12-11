@@ -6,16 +6,16 @@
 #include "table.h"
 
 table* postes_new(void) {
-    pthread_mutex_t *voie_A = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
-            *voie_B = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
-            *aiguillage_1 = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
+    pthread_mutex_t *aiguillage_1 = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
             *aiguillage_2 = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
             *ligne_TGV = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
             *ligne_GL = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
             *tunnel = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
             *ligne = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
 
-    sem_t *voie_C = (sem_t*)malloc(sizeof(sem_t)),
+    sem_t *voie_A = (sem_t*)malloc(sizeof(sem_t)),
+            *voie_B = (sem_t*)malloc(sizeof(sem_t)),
+            *voie_C = (sem_t*)malloc(sizeof(sem_t)),
             *voie_D = (sem_t*)malloc(sizeof(sem_t)),
             *ligne_M_EO = (sem_t*)malloc(sizeof(sem_t)),
             *ligne_M_OE = (sem_t*)malloc(sizeof(sem_t));
@@ -27,13 +27,13 @@ table* postes_new(void) {
             *P3 = table_new(),
             *postes_aiguillages = table_new();
 
+    sem_init(voie_A, 0, 2);
+    sem_init(voie_B, 0, 2);
     sem_init(voie_C, 0, 2);
     sem_init(voie_D, 0, 2);
     sem_init(ligne_M_EO, 0, 2);
     sem_init(ligne_M_OE, 0, 2);
-
-    pthread_mutex_init(voie_A, NULL);
-    pthread_mutex_init(voie_B, NULL);
+    
     pthread_mutex_init(aiguillage_1, NULL);
     pthread_mutex_init(aiguillage_2, NULL);
     pthread_mutex_init(ligne_TGV, NULL);
