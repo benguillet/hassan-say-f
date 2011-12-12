@@ -25,6 +25,7 @@ void* dictionary_get(dictionary* dictionary, char* key);
 void dictionary_set(dictionary* dictionary, char* key, void* value, int free);
 void dictionary_del(dictionary* t);
 
+void* dictionary_2d_get(dictionary* d, char *key_c, char *key_l);
 
 #endif	/* TABLE_H */
 

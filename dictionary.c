@@ -92,3 +92,7 @@ void dictionary_del(dictionary* t) {
     
     free(t);
 }
+
+void* dictionary_2d_get(dictionary* d, char *key_c, char *key_l) {
+    return dictionary_get(dictionary_get(d, key_c), key_l);
+}
