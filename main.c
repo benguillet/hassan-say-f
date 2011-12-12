@@ -12,7 +12,7 @@
 #include <semaphore.h>
 #include "postes.h"
 #include "structures.h"
-#include "table.h"
+#include "dictionary.h"
 #include "train.h"
 
 int main(int argc, char** argv) {
@@ -37,10 +37,14 @@ int main(int argc, char** argv) {
 
     pthread_create(&M_1_thread, NULL, M_thread_fn, &M_1);
     pthread_create(&M_2_thread, NULL, M_thread_fn, &M_2);
+/*
     pthread_create(&GL_1_thread, NULL, GL_thread_fn, &GL_1);
+*/
     pthread_join(M_1_thread, NULL);
     pthread_join(M_2_thread, NULL);
+/*
     pthread_join(GL_1_thread, NULL);
+*/
     
     postes_del(postes_aiguillages);
 

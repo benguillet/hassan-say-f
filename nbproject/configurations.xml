@@ -4,9 +4,10 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>banquier.h</itemPath>
+      <itemPath>dictionary.h</itemPath>
       <itemPath>postes.h</itemPath>
       <itemPath>structures.h</itemPath>
-      <itemPath>table.h</itemPath>
       <itemPath>train.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -16,9 +17,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>dictionary.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>postes.c</itemPath>
-      <itemPath>table.c</itemPath>
       <itemPath>train.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"

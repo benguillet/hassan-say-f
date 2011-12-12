@@ -8,7 +8,7 @@
 #ifndef POSTES_H
 #define	POSTES_H
 
-#include "table.h"
+#include "dictionary.h"
 
 dictionary* postes_new(void);
 void postes_del(dictionary* postes_aiguillages);

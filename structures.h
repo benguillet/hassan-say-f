@@ -8,7 +8,7 @@
 #ifndef STRUCTURES_H
 #define	STRUCTURES_H
 
-#include "table.h"
+#include "dictionary.h"
 
 typedef enum {
     EO = 1,

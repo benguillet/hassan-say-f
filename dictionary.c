@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
-#include "table.h"
+#include "dictionary.h"
 
 dictionary* dictionary_new() {
     return (dictionary*)calloc(1, sizeof(_element));
 }
 
-void table_add(dictionary* dictionary, char* key, void* value) {    
+void dictionary_add(dictionary* dictionary, char* key, void* value) {    
     _element *e, *new;
     
     if (dictionary == NULL)
@@ -37,7 +37,7 @@ void table_add(dictionary* dictionary, char* key, void* value) {
     dictionary->last = new;
 }
 
-void* table_get(dictionary* dictionary, char* key) {
+void* dictionary_get(dictionary* dictionary, char* key) {
     _element *e;
     
     if (dictionary == NULL)
@@ -56,7 +56,7 @@ void* table_get(dictionary* dictionary, char* key) {
     return NULL;
 }
 
-void table_set(dictionary* dictionary, char* key, void* value, int free_value) {
+void dictionary_set(dictionary* dictionary, char* key, void* value, int free_value) {
     _element *e, *p, *n;
     
     if (dictionary == NULL)
@@ -76,7 +76,7 @@ void table_set(dictionary* dictionary, char* key, void* value, int free_value) {
     }
 }
 
-void table_del(dictionary* t) {
+void dictionary_del(dictionary* t) {
     _element *e, *n;
     
     if (t == NULL)
