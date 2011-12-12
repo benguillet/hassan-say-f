@@ -18,7 +18,7 @@
 int main(int argc, char** argv) {
     train M_1, GL_1, M_2;
     pthread_t M_1_thread, GL_1_thread, M_2_thread;
-    table *postes_aiguillages = postes_new();
+    dictionary *postes_aiguillages = postes_new();
 
     // Test d'un M OE
     M_1.nom = "M 1";

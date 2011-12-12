@@ -5,7 +5,7 @@
 #include "structures.h"
 #include "table.h"
 
-table* postes_new(void) {
+dictionary* postes_new(void) {
     pthread_mutex_t *aiguillage_1 = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
             *aiguillage_2 = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
             *ligne_TGV = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t)),
@@ -20,12 +20,12 @@ table* postes_new(void) {
             *ligne_M_EO = (sem_t*)malloc(sizeof(sem_t)),
             *ligne_M_OE = (sem_t*)malloc(sizeof(sem_t));
 
-    table *Gare = table_new(),
-            *P0 = table_new(),
-            *P1 = table_new(),
-            *P2 = table_new(),
-            *P3 = table_new(),
-            *postes_aiguillages = table_new();
+    dictionary *Gare = dictionary_new(),
+            *P0 = dictionary_new(),
+            *P1 = dictionary_new(),
+            *P2 = dictionary_new(),
+            *P3 = dictionary_new(),
+            *postes_aiguillages = dictionary_new();
 
     sem_init(voie_A, 0, 2);
     sem_init(voie_B, 0, 2);
@@ -75,7 +75,7 @@ table* postes_new(void) {
     return postes_aiguillages;
 }
 
-void postes_del(table* t) {
+void postes_del(dictionary* t) {
     _element *e, *n;
     
     if (t == NULL)
@@ -85,7 +85,7 @@ void postes_del(table* t) {
     
     while (n != NULL) {
         n = e->next;
-        table_del((table*)e);
+        table_del((dictionary*)e);
         e = e->next;
     }
     

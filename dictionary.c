@@ -2,17 +2,17 @@
 #include <string.h>
 #include "table.h"
 
-table* table_new() {
-    return (table*)calloc(1, sizeof(_element));
+dictionary* dictionary_new() {
+    return (dictionary*)calloc(1, sizeof(_element));
 }
 
-void table_add(table* table, char* key, void* value) {    
+void table_add(dictionary* dictionary, char* key, void* value) {    
     _element *e, *new;
     
-    if (table == NULL)
+    if (dictionary == NULL)
         return;
     
-    e = table->first;
+    e = dictionary->first;
     
     while (e != NULL) {
         if (strcmp(e->key, key) == 0) {
@@ -26,24 +26,24 @@ void table_add(table* table, char* key, void* value) {
     new->key = strcpy((char*)malloc(sizeof(char) * (strlen(key) + 1)), key);
     new->value = value;
     
-    if (table->first == NULL) {
-        table->first = new;
+    if (dictionary->first == NULL) {
+        dictionary->first = new;
     }
     
-    if (table->last != NULL) {
-        table->last->next = new;
+    if (dictionary->last != NULL) {
+        dictionary->last->next = new;
     }
     
-    table->last = new;
+    dictionary->last = new;
 }
 
-void* table_get(table* table, char* key) {
+void* table_get(dictionary* dictionary, char* key) {
     _element *e;
     
-    if (table == NULL)
+    if (dictionary == NULL)
         return;
     
-    e = table->first;
+    e = dictionary->first;
     
     while (e != NULL) {
         if (strcmp(e->key, key) == 0) {
@@ -56,13 +56,13 @@ void* table_get(table* table, char* key) {
     return NULL;
 }
 
-void table_set(table* table, char* key, void* value, int free_value) {
+void table_set(dictionary* dictionary, char* key, void* value, int free_value) {
     _element *e, *p, *n;
     
-    if (table == NULL)
+    if (dictionary == NULL)
         return;
     
-    e = table->first;
+    e = dictionary->first;
     
     while (e != NULL) {
         if (strcmp(e->key, key) == 0) {
@@ -76,7 +76,7 @@ void table_set(table* table, char* key, void* value, int free_value) {
     }
 }
 
-void table_del(table* t) {
+void table_del(dictionary* t) {
     _element *e, *n;
     
     if (t == NULL)

@@ -10,8 +10,8 @@
 
 #include "table.h"
 
-table* postes_new(void);
-void postes_del(table* postes_aiguillages);
+dictionary* postes_new(void);
+void postes_del(dictionary* postes_aiguillages);
 
 #endif	/* POSTES_H */
 

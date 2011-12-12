@@ -18,7 +18,7 @@ typedef enum {
 typedef struct {
     char* nom;
     direction direction;
-    table* postes;
+    dictionary* postes;
 } train;
 
 #endif	/* STRUCTURES_H */
