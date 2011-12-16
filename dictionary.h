@@ -1,31 +1,24 @@
-/* 
- * File:   hashtable.h
+/*
+ * File:   dictionary.h
  * Author: ludovic
  *
- * Created on 9 décembre 2011, 10:53
+ * Created on 16 décembre 2011, 10:21
  */
 
 #ifndef DICTIONARY_H
 #define	DICTIONARY_H
 
-typedef struct __element{
-    char* key; 
+typedef struct __dictionary_element{
+    void* key;
     void* value;
-    struct __element* next;
-} _element;
+    struct __dictionary_element* next;
+} dictionary_element;
 
-typedef struct {
-    _element* first;
-    _element* last;
-} dictionary;
+typedef dictionary_element dictionary;
 
-dictionary* dictionary_new();
-void dictionary_add(dictionary* dictionary, char* key, void* value);
-void* dictionary_get(dictionary* dictionary, char* key);
-void dictionary_set(dictionary* dictionary, char* key, void* value, int free);
-void dictionary_del(dictionary* t);
+dictionary* dictionary_new(void* key, void* value);
+void dictionary_add(dictionary* dictionary, void* key, void* value);
+void* dictionary_get(dictionary* dictionary, void* key);
 
-void* dictionary_2d_get(dictionary* d, char *key_c, char *key_l);
-
-#endif	/* TABLE_H */
+#endif	/* DICTIONARY_H */
 
