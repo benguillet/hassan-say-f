@@ -6,7 +6,8 @@
                    projectFiles="true">
       <itemPath>banquier.h</itemPath>
       <itemPath>dictionary.h</itemPath>
-      <itemPath>postes.h</itemPath>
+      <itemPath>dictionary_char.h</itemPath>
+      <itemPath>list.h</itemPath>
       <itemPath>structures.h</itemPath>
       <itemPath>train.h</itemPath>
     </logicalFolder>
@@ -17,9 +18,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>banquier.c</itemPath>
       <itemPath>dictionary.c</itemPath>
+      <itemPath>dictionary_char.c</itemPath>
+      <itemPath>list.c</itemPath>
       <itemPath>main.c</itemPath>
-      <itemPath>postes.c</itemPath>
       <itemPath>train.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"

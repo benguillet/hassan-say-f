@@ -4,231 +4,337 @@
 #include <semaphore.h>
 #include "train.h"
 #include "structures.h"
+#include "list.h"
 
 void* TGV_thread_fn(void* arg) {
-    train *TGV = (train*)arg;
-    
+    train *TGV = (train*) arg;
+    list *l;
+
     switch (TGV->direction) {
         case OE:
-            printf("%s - OE - P(Voie C)\n", TGV->nom);
-            sem_wait(dictionary_2d_get(TGV->postes, "Gare", "Voie C"));
-            
-            printf("%s - OE - P(Aiguillage 2)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P0", "Aiguillage 2"));
-            
-            printf("%s - OE - P(Ligne TGV)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P1", "Ligne TGV"));
-            
-            printf("%s - OE - V(Voie C)\n", TGV->nom);
-            sem_post(dictionary_2d_get(TGV->postes, "Gare", "Voie C"));
-            
-            printf("%s - OE - V(Aiguillage 2)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P0", "Aiguillage 2"));
-            
-            printf("%s - OE - P(Tunnel)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P2", "Tunnel"));
-            
-            printf("%s - OE - P(Ligne)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P3", "Ligne"));
-            
-            printf("%s - OE - V(Ligne TGV)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P1", "Ligne TGV"));   
-            
-            printf("%s - OE - V(Tunnel)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P2", "Tunnel")); 
-            
-            printf("%s - OE - V(Ligne)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P3", "Ligne"));
-                        
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "Gare", "Voie C"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P0", "Aiguillage 2"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P1", "Ligne TGV"));
+
+            printf("%p - %s - OE - locking : Voie C, Aiguillage 2, Ligne TGV\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_lock(TGV->banquier, l);
+
+            printf("%p - %s - OE - locked : Voie C, Aiguillage 2, Ligne TGV\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "Gare", "Voie C"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P0", "Aiguillage 2"));
+
+            printf("%p - %s - OE - releasing : Voie C, Aiguillage 2\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_unlock(TGV->banquier, l);
+
+            printf("%p - %s - OE - released : Voie C, Aiguillage 2\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "P2", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P3", "Ligne"));
+
+            printf("%p - %s - OE - locking : Tunnel, Ligne\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_lock(TGV->banquier, l);
+
+            printf("%p - %s - OE - locked : Tunnel, Ligne\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "P1", "Ligne TGV"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P2", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P3", "Ligne"));
+
+            printf("%p - %s - OE - releasing : Ligne TGV, Tunnel, Ligne\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_unlock(TGV->banquier, l);
+
+            printf("%p - %s - OE - released : Ligne TGV, Tunnel, Ligne\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
             break;
         case EO:
-            printf("%s - EO - P(Ligne)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P3", "Ligne"));
-            
-            printf("%s - EO - P(Tunnel)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P3", "Tunnel"));
-            
-            printf("%s - EO - P(Ligne TGV)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P2", "Ligne TGV"));
-            
-            printf("%s - EO - V(Ligne)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P3", "Ligne"));
-            
-            printf("%s - EO - V(Tunnel)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P3", "Tunnel"));
-            
-            printf("%s - EO - P(Aiguillage 2)\n", TGV->nom);
-            pthread_mutex_lock(dictionary_2d_get(TGV->postes, "P1", "Aiguillage 2"));
-                        
-            printf("%s - EO - P(Voie D)\n", TGV->nom);
-            sem_wait(dictionary_2d_get(TGV->postes, "P0", "Voie D"));
-            
-            printf("%s - EO - V(Ligne TGV)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P1", "Ligne TGV"));
-                                    
-            printf("%s - EO - V(Aiguillage 2)\n", TGV->nom);
-            pthread_mutex_unlock(dictionary_2d_get(TGV->postes, "P1", "Aiguillage 2"));
-                                    
-            printf("%s - EO - V(Voie D)\n", TGV->nom);
-            sem_post(dictionary_2d_get(TGV->postes, "P0", "Voie D"));
-                        
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "P3", "Ligne"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P3", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P2", "Ligne TGV"));
+
+            printf("%p - %s - EO - locking : Ligne, Tunnel, Ligne TGV\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_lock(TGV->banquier, l);
+
+            printf("%p - %s - EO - locked : Ligne, Tunnel, Ligne TGV\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "P3", "Ligne"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P3", "Tunnel"));
+
+            printf("%p - %s - EO - releasing : Ligne, Tunnel\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_unlock(TGV->banquier, l);
+
+            printf("%p - %s - EO - released : Ligne, Tunnel\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "P1", "Aiguillage 2"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P0", "Voie D"));
+
+            printf("%p - %s - EO - locking : Aiguillage 2, Voie D\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_lock(TGV->banquier, l);
+
+            printf("%p - %s - EO - locked : Aiguillage 2, Voie D\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(TGV->postes, "P2", "Ligne TGV"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P1", "Aiguillage 2"));
+            liste_add(l, dictionary_char_2d_get(TGV->postes, "P0", "Voie D"));
+
+            printf("%p - %s - EO - releasing : Ligne TGV, Aiguillage 2, Voie D\n", (void*) (pthread_self()), TGV->nom);
+
+            banquier_unlock(TGV->banquier, l);
+
+            printf("%p - %s - EO - released : Ligne TGV, Aiguillage 2, Voie D\n", (void*) (pthread_self()), TGV->nom);
+
+            liste_del(l);
+
             break;
         default:
             perror("Erreur : TGV - direction inconnu");
             pthread_exit(NULL);
     }
-    
+
+    printf("%p - %s - %s - ARRIVE ------------------------------------------\n", (void*) (pthread_self()), TGV->nom, TGV->direction == OE ? "OE" : "EO");
+
     return NULL;
 }
 
 void* GL_thread_fn(void* arg) {
-    train *GL = (train*)arg;
-    
+    train *GL = (train*) arg;
+    list *l;
+
     switch (GL->direction) {
         case OE:
-            printf("%s - OE - P(Voie C)\n", GL->nom);
-            sem_wait(dictionary_2d_get(GL->postes, "Gare", "Voie C"));
-            
-            printf("%s - OE - P(Aiguillage 2)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P0", "Aiguillage 2"));
-            
-            printf("%s - OE - P(Ligne GL)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P1", "Ligne GL"));
-            
-            printf("%s - OE - V(Voie C)\n", GL->nom);
-            sem_post(dictionary_2d_get(GL->postes, "Gare", "Voie C"));
-            
-            printf("%s - OE - V(Aiguillage 2)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P0", "Aiguillage 2"));
-            
-            printf("%s - OE - P(Tunnel)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P2", "Tunnel"));
-            
-            printf("%s - OE - P(Ligne)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P3", "Ligne"));
-            
-            printf("%s - OE - V(Ligne GL)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P1", "Ligne GL"));   
-            
-            printf("%s - OE - V(Tunnel)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P2", "Tunnel")); 
-            
-            printf("%s - OE - V(Ligne)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P3", "Ligne"));
-            
+            l = liste_new(dictionary_char_2d_get(GL->postes, "Gare", "Voie C"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P0", "Aiguillage 2"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P1", "Ligne GL"));
+
+            printf("%p - %s - OE - locking : Voie C, Aiguillage 2, Ligne GL\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_lock(GL->banquier, l);
+
+            printf("%p - %s - OE - locked : Voie C, Aiguillage 2, Ligne GL\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(GL->postes, "Gare", "Voie C"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P0", "Aiguillage 2"));
+
+            printf("%p - %s - OE - releasing : Voie C, Aiguillage 2\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_unlock(GL->banquier, l);
+
+            printf("%p - %s - OE - released : Voie C, Aiguillage 2\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(GL->postes, "P2", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P3", "Ligne"));
+
+            printf("%p - %s - OE - locking : Tunnel, Ligne\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_lock(GL->banquier, l);
+
+            printf("%p - %s - OE - locked : Tunnel, Ligne\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(GL->postes, "P1", "Ligne GL"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P2", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P3", "Ligne"));
+
+            printf("%p - %s - OE - releasing : Ligne GL, Tunnel, Ligne\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_unlock(GL->banquier, l);
+
+            printf("%p - %s - OE - released : Ligne GL, Tunnel, Ligne\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
             break;
         case EO:
-            printf("%s - EO - P(Ligne)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P3", "Ligne"));
-            
-            printf("%s - EO - P(Tunnel)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P3", "Tunnel"));
-            
-            printf("%s - EO - P(Ligne GL)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P2", "Ligne GL"));
-            
-            printf("%s - EO - V(Ligne)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P3", "Ligne"));
-            
-            printf("%s - EO - V(Tunnel)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P3", "Tunnel"));
-            
-            printf("%s - EO - P(Aiguillage 2)\n", GL->nom);
-            pthread_mutex_lock(dictionary_2d_get(GL->postes, "P1", "Aiguillage 2"));
-                        
-            printf("%s - EO - P(Voie D)\n", GL->nom);
-            sem_wait(dictionary_2d_get(GL->postes, "P0", "Voie D"));
-            
-            printf("%s - EO - V(Ligne GL)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P1", "Ligne GL"));
-                                    
-            printf("%s - EO - V(Aiguillage 2)\n", GL->nom);
-            pthread_mutex_unlock(dictionary_2d_get(GL->postes, "P1", "Aiguillage 2"));
-                                    
-            printf("%s - EO - V(Voie D)\n", GL->nom);
-            sem_post(dictionary_2d_get(GL->postes, "P0", "Voie D"));
-            
+            l = liste_new(dictionary_char_2d_get(GL->postes, "P3", "Ligne"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P3", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P2", "Ligne GL"));
+
+            printf("%p - %s - EO - locking : Ligne, Tunnel, Ligne GL\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_lock(GL->banquier, l);
+
+            printf("%p - %s - EO - locked : Ligne, Tunnel, Ligne GL\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(GL->postes, "P3", "Ligne"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P3", "Tunnel"));
+
+            printf("%p - %s - EO - releasing : Ligne, Tunnel\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_unlock(GL->banquier, l);
+
+            printf("%p - %s - EO - released : Ligne, Tunnel\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(GL->postes, "P1", "Aiguillage 2"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P0", "Voie D"));
+
+            printf("%p - %s - EO - locking : Aiguillage 2, Voie D\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_lock(GL->banquier, l);
+
+            printf("%p - %s - EO - locked : Aiguillage 2, Voie D\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(GL->postes, "P2", "Ligne GL"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P1", "Aiguillage 2"));
+            liste_add(l, dictionary_char_2d_get(GL->postes, "P0", "Voie D"));
+
+            printf("%p - %s - EO - releasing : Ligne GL, Aiguillage 2, Voie D\n", (void*) (pthread_self()), GL->nom);
+
+            banquier_unlock(GL->banquier, l);
+
+            printf("%p - %s - EO - released : Ligne GL, Aiguillage 2, Voie D\n", (void*) (pthread_self()), GL->nom);
+
+            liste_del(l);
+
             break;
         default:
             perror("Erreur : GL - direction inconnu");
             pthread_exit(NULL);
     }
-    
+
+    printf("%p - %s - %s - ARRIVE ------------------------------------------\n", (void*) (pthread_self()), GL->nom, GL->direction == OE ? "OE" : "EO");
+
     return NULL;
 }
 
 void* M_thread_fn(void* arg) {
-    train *M = (train*)arg;
-    
+    train *M = (train*) arg;
+    list* l;
+
     switch (M->direction) {
         case OE:
-            printf("%s - OE - P(Voie A)\n", M->nom);
-            sem_wait(dictionary_2d_get(M->postes, "P1", "Voie A"));
-            
-            printf("%s - OE - P(Aiguillage 1)\n", M->nom);
-            pthread_mutex_lock(dictionary_2d_get(M->postes, "P1", "Aiguillage 1"));
-            
-            printf("%s - OE - P(Ligne M - OE)\n", M->nom);
-            sem_wait(dictionary_2d_get(M->postes, "P1", "Ligne M - OE"));
-            
-            printf("%s - OE - V(Voie A)\n", M->nom);
-            sem_post(dictionary_2d_get(M->postes, "P1", "Voie A"));
-            
-            printf("%s - OE - V(Aiguillage 1)\n", M->nom);
-            pthread_mutex_unlock(dictionary_2d_get(M->postes, "P1", "Aiguillage 1"));
-            
-            printf("%s - OE - P(Tunnel)\n", M->nom);
-            pthread_mutex_lock(dictionary_2d_get(M->postes, "P2", "Tunnel"));
-            
-            printf("%s - OE - P(Ligne)\n", M->nom);
-            pthread_mutex_lock(dictionary_2d_get(M->postes, "P3", "Ligne"));
-            
-            printf("%s - OE - V(Ligne M - OE)\n", M->nom);
-            sem_post(dictionary_2d_get(M->postes, "P1", "Ligne M - OE"));   
-            
-            printf("%s - OE - V(Tunnel)\n", M->nom);
-            pthread_mutex_unlock(dictionary_2d_get(M->postes, "P2", "Tunnel")); 
-            
-            printf("%s - OE - V(Ligne)\n", M->nom);
-            pthread_mutex_unlock(dictionary_2d_get(M->postes, "P3", "Ligne"));
-            
+            l = liste_new(dictionary_char_2d_get(M->postes, "P1", "Voie A"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P1", "Aiguillage 1"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P1", "Ligne M - OE"));
+
+            printf("%p - %s - OE - locking : Voie A, Aiguillage 1, Ligne M - OE\n", (void*) (pthread_self()), M->nom);
+
+            banquier_lock(M->banquier, l);
+
+            printf("%p - %s - OE - locked : Voie A, Aiguillage 1, Ligne M - OE\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(M->postes, "P1", "Voie A"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P1", "Aiguillage 1"));
+
+            printf("%p - %s - OE - releasing : Voie A, Aiguillage 1\n", (void*) (pthread_self()), M->nom);
+
+            banquier_unlock(M->banquier, l);
+
+            printf("%p - %s - OE - released : Voie A, Aiguillage 1\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(M->postes, "P2", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P3", "Ligne"));
+
+            printf("%p - %s - OE - locking : Tunnel, Ligne\n", (void*) (pthread_self()), M->nom);
+
+            banquier_lock(M->banquier, l);
+
+            printf("%p - %s - OE - locked : Tunnel, Ligne\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(M->postes, "P1", "Ligne M - OE"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P2", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P3", "Ligne"));
+
+            printf("%p - %s - OE - releasing : Ligne M - OE, Tunnel, Ligne\n", (void*) (pthread_self()), M->nom);
+
+            banquier_unlock(M->banquier, l);
+
+            printf("%p - %s - OE - released : Ligne M - OE, Tunnel, Ligne\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
             break;
         case EO:
-            printf("%s - EO - P(Ligne)\n", M->nom);
-            pthread_mutex_lock(dictionary_2d_get(M->postes, "P3", "Ligne"));
-            
-            printf("%s - EO - P(Tunnel)\n", M->nom);
-            pthread_mutex_lock(dictionary_2d_get(M->postes, "P3", "Tunnel"));
-            
-            printf("%s - EO - P(Ligne M - EO)\n", M->nom);
-            sem_wait(dictionary_2d_get(M->postes, "P2", "Ligne M - EO"));
-            
-            printf("%s - EO - V(Ligne)\n", M->nom);
-            pthread_mutex_unlock(dictionary_2d_get(M->postes, "P3", "Ligne"));
-            
-            printf("%s - EO - V(Tunnel)\n", M->nom);
-            pthread_mutex_unlock(dictionary_2d_get(M->postes, "P3", "Tunnel"));
-            
-            printf("%s - EO - P(Aiguillage 1)\n", M->nom);
-            pthread_mutex_lock(dictionary_2d_get(M->postes, "P1", "Aiguillage 1"));
-               
-            printf("%s - EO - P(Voie B)\n", M->nom);
-            sem_wait(dictionary_2d_get(M->postes, "P1", "Voie B"));
-            
-            printf("%s - EO - V(Ligne M - EO)\n", M->nom);
-            sem_post(dictionary_2d_get(M->postes, "P1", "Ligne M - EO"));
-                                    
-            printf("%s - EO - V(Aiguillage 1)\n", M->nom);
-            pthread_mutex_unlock(dictionary_2d_get(M->postes, "P1", "Aiguillage 1"));
-                                    
-            printf("%s - EO - V(Voie B)\n", M->nom);
-            sem_post(dictionary_2d_get(M->postes, "P1", "Voie B"));
-            
+            l = liste_new(dictionary_char_2d_get(M->postes, "P3", "Ligne"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P3", "Tunnel"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P2", "Ligne M - EO"));
+
+            printf("%p - %s - EO - locking : Ligne, Tunnel, Ligne M - EO\n", (void*) (pthread_self()), M->nom);
+
+            banquier_lock(M->banquier, l);
+
+            printf("%p - %s - EO - locked : Ligne, Tunnel, Ligne M - EO\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(M->postes, "P3", "Ligne"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P3", "Tunnel"));
+
+            printf("%p - %s - EO - releasing : Ligne, Tunnel\n", (void*) (pthread_self()), M->nom);
+
+            banquier_unlock(M->banquier, l);
+
+            printf("%p - %s - EO - released : Ligne, Tunnel\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(M->postes, "P1", "Aiguillage 1"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P1", "Voie B"));
+
+            printf("%p - %s - EO - locking : Aiguillage 1, Voie B\n", (void*) (pthread_self()), M->nom);
+
+            banquier_lock(M->banquier, l);
+
+            printf("%p - %s - EO - locked : Aiguillage 1, Voie B\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
+            l = liste_new(dictionary_char_2d_get(M->postes, "P2", "Ligne M - EO"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P1", "Aiguillage 1"));
+            liste_add(l, dictionary_char_2d_get(M->postes, "P1", "Voie B"));
+
+            printf("%p - %s - EO - releasing : Ligne M - EO, Aiguillage 1, Voie B\n", (void*) (pthread_self()), M->nom);
+
+            banquier_unlock(M->banquier, l);
+
+            printf("%p - %s - EO - released : Ligne M - EO, Aiguillage 1, Voie B\n", (void*) (pthread_self()), M->nom);
+
+            liste_del(l);
+
             break;
         default:
             perror("Erreur : M - direction inconnu");
             pthread_exit(NULL);
     }
-    
+
+    printf("%p - %s - %s - ARRIVE ------------------------------------------\n", (void*) (pthread_self()), M->nom, M->direction == OE ? "OE" : "EO");
+
     return NULL;
 }

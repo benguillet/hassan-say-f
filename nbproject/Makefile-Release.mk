@@ -35,9 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/train.o \
+	${OBJECTDIR}/dictionary_char.o \
 	${OBJECTDIR}/dictionary.o \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/postes.o
+	${OBJECTDIR}/banquier.o \
+	${OBJECTDIR}/list.o \
+	${OBJECTDIR}/main.o
 
 
 # C Compiler Flags
@@ -69,20 +71,30 @@ ${OBJECTDIR}/train.o: train.c
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/train.o train.c
 
+${OBJECTDIR}/dictionary_char.o: dictionary_char.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/dictionary_char.o dictionary_char.c
+
 ${OBJECTDIR}/dictionary.o: dictionary.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/dictionary.o dictionary.c
 
+${OBJECTDIR}/banquier.o: banquier.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/banquier.o banquier.c
+
+${OBJECTDIR}/list.o: list.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/list.o list.c
+
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
-
-${OBJECTDIR}/postes.o: postes.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/postes.o postes.c
 
 # Subprojects
 .build-subprojects:
