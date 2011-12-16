@@ -8,8 +8,8 @@
 #ifndef STRUCTURES_H
 #define	STRUCTURES_H
 
-#include "dictionary.h"
-#include "table2d.h"
+#include "dictionary_char.h"
+#include "banquier.h"
 
 typedef enum {
     EO = 1,
@@ -17,9 +17,10 @@ typedef enum {
 } direction;
 
 typedef struct {
+    char* nom;
     direction direction;
-    dictionary* postes;
-    table2d* ressources_banquier;
+    dictionary_char* postes;
+    banquier* banquier;
 } train;
 
 #endif	/* STRUCTURES_H */
