@@ -126,12 +126,7 @@ dictionary_char* projet_postes_new(void) {
             *tunnel = (sem_t*)malloc(sizeof(sem_t)),
             *ligne = (sem_t*)malloc(sizeof(sem_t));
 
-    dictionary_char *Gare = dictionary_char_new(),
-            *P0 = dictionary_char_new(),
-            *P1 = dictionary_char_new(),
-            *P2 = dictionary_char_new(),
-            *P3 = dictionary_char_new(),
-            *postes_aiguillages = dictionary_char_new();
+    dictionary_char *Gare, *P0, *P1, *P2, *P3, *postes_aiguillages;
 
     sem_init(voie_A, 0, 2);
     sem_init(voie_B, 0, 2);
@@ -147,14 +142,14 @@ dictionary_char* projet_postes_new(void) {
     sem_init(tunnel, 0, 1);
     sem_init(ligne, 0, 1);
 
-    dictionary_char_add(Gare, "Voie C", (void*)voie_C);
+    Gare = dictionary_char_new("Voie C", (void*)voie_C);
     dictionary_char_add(Gare, "Voie D", (void*)voie_D);
 
-    dictionary_char_add(P0, "Voie C", (void*)voie_C);
+    P0 = dictionary_char_new("Voie C", (void*)voie_C);
     dictionary_char_add(P0, "Voie D", (void*)voie_D);
     dictionary_char_add(P0, "Aiguillage 2", (void*)aiguillage_2);
 
-    dictionary_char_add(P1, "Aiguillage 1", (void*)aiguillage_1);
+    P1 = dictionary_char_new("Aiguillage 1", (void*)aiguillage_1);
     dictionary_char_add(P1, "Aiguillage 2", (void*)aiguillage_2);
     dictionary_char_add(P1, "Ligne TGV", (void*)ligne_TGV);
     dictionary_char_add(P1, "Ligne GL", (void*)ligne_GL);
@@ -163,16 +158,16 @@ dictionary_char* projet_postes_new(void) {
     dictionary_char_add(P1, "Voie A", (void*)voie_A);
     dictionary_char_add(P1, "Voie B", (void*)voie_B);
 
-    dictionary_char_add(P2, "Ligne TGV", (void*)ligne_TGV);
+    P2 = dictionary_char_new("Ligne TGV", (void*)ligne_TGV);
     dictionary_char_add(P2, "Ligne GL", (void*)ligne_GL);
     dictionary_char_add(P2, "Ligne M - EO", (void*)ligne_M_EO);
     dictionary_char_add(P2, "Ligne M - OE", (void*)ligne_M_OE);
     dictionary_char_add(P2, "Tunnel", (void*)tunnel);
 
-    dictionary_char_add(P3, "Tunnel", (void*)tunnel);
+    P3 = dictionary_char_new("Tunnel", (void*)tunnel);
     dictionary_char_add(P3, "Ligne", (void*)ligne);
 
-    dictionary_char_add(postes_aiguillages, "Gare", (void*)Gare);
+    postes_aiguillages = dictionary_char_new("Gare", (void*)Gare);
     dictionary_char_add(postes_aiguillages, "P0", (void*)P0);
     dictionary_char_add(postes_aiguillages, "P1", (void*)P1);
     dictionary_char_add(postes_aiguillages, "P2", (void*)P2);
@@ -182,12 +177,12 @@ dictionary_char* projet_postes_new(void) {
 }
 
 void projet_postes_del(dictionary_char* self) {
-    __dictionary_char_element *e, *n;
+    dictionary_char_element *e, *n;
 
     if (self == NULL)
         return;
 
-    n = e = self->first;
+    n = e = self;
 
     while (n != NULL) {
         n = e->next;

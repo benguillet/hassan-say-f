@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   hashtable.h
  * Author: ludovic
  *
@@ -12,14 +12,11 @@ typedef struct __dictionary_char_element{
     char* key;
     void* value;
     struct __dictionary_char_element* next;
-} __dictionary_char_element;
+} dictionary_char_element;
 
-typedef struct {
-    __dictionary_char_element* first;
-    __dictionary_char_element* last;
-} dictionary_char;
+typedef dictionary_char_element dictionary_char;
 
-dictionary_char* dictionary_char_new();
+dictionary_char* dictionary_char_new(char* key, void* value);
 void dictionary_char_add(dictionary_char* dictionary_char, char* key, void* value);
 void* dictionary_char_get(dictionary_char* dictionary_char, char* key);
 void dictionary_char_set(dictionary_char* dictionary_char, char* key, void* value, int free);
