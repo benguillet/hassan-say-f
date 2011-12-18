@@ -47,7 +47,7 @@ void* dictionary_char_get(dictionary_char* dictionary_char, char* key) {
     dictionary_char_element *e;
 
     if (dictionary_char == NULL)
-        return;
+        return NULL;
 
     e = dictionary_char;
 
@@ -63,7 +63,7 @@ void* dictionary_char_get(dictionary_char* dictionary_char, char* key) {
 }
 
 void dictionary_char_set(dictionary_char* d, char* key, void* value, int free_value) {
-    dictionary_char_element *e, *p, *n;
+    dictionary_char_element *e;
 
     if (d == NULL)
         return;

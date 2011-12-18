@@ -46,7 +46,7 @@ void* dictionary_get(dictionary* d, void* key) {
     dictionary_element *e;
 
     if (d == NULL)
-        return;
+        return NULL;
 
     e = d;
 

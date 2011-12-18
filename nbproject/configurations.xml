@@ -47,7 +47,7 @@
       </toolsSet>
       <compileType>
         <cTool>
-          <commandLine>-pthread</commandLine>
+          <commandLine>-Wall -ansi -pedantic</commandLine>
         </cTool>
         <linkerTool>
           <commandlineTool>gcc</commandlineTool>
@@ -65,6 +65,7 @@
       <compileType>
         <cTool>
           <developmentMode>5</developmentMode>
+          <commandLine>-Wall -ansi -pedantic</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
@@ -75,6 +76,11 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
     </conf>
   </confs>

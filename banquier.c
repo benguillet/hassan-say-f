@@ -114,7 +114,7 @@ char* banquier_disponibilites_tostring(banquier* self) {
     char *str = calloc(1000, sizeof (char)), *tmp = calloc(1000, sizeof (char));
 
     if (self->disponibilites == NULL)
-        return;
+        return "";
 
     sprintf(tmp, "%p\n", (void*) (pthread_self()));
     strcat(str, tmp);
