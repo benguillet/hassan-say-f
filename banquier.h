@@ -1,10 +1,3 @@
-/*
- * File:   banquier.h
- * Author: ludovic
- *
- * Created on 12 décembre 2011, 11:44
- */
-
 #ifndef BANQUIER_H
 #define	BANQUIER_H
 

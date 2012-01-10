@@ -1,10 +1,3 @@
-/* 
- * File:   structures.h
- * Author: ludovic
- *
- * Created on 11 décembre 2011, 13:43
- */
-
 #ifndef STRUCTURES_H
 #define	STRUCTURES_H
 

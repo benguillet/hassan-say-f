@@ -18,11 +18,16 @@ banquier* projet_banquier_new(dictionary_char* postes);
 void projet_banquier_del(banquier *self);
 
 int main(int argc, char* argv[]) {
-    int i, nb_trains = (argc > 1 ? atoi(argv[1]) : NB_TRAINS);
+    int i, nb_trains = (argc > 1 ? atoi(argv[1]) : NB_TRAINS); // nb trains définis en paramètre ou via la constante
     char* nom;
+    
     train* trains = (train*) malloc(sizeof (train) * nb_trains);
     pthread_t* trains_threads = (pthread_t*) malloc(sizeof (pthread_t) * nb_trains);
+    
+    // Création d'un ensemble de postes d'aiguillages spécifique à notre réseau ferroviaire (projet)
     dictionary_char *postes_aiguillages = projet_postes_new();
+    
+    // Création d'un banquier spécifique à notre réseau ferroviaire (projet)
     banquier *banquier = projet_banquier_new(postes_aiguillages);
 
     srand(time(NULL));
@@ -187,6 +192,12 @@ void projet_postes_del(dictionary_char* self) {
     dictionary_char_del(self);
 }
 
+
+/**
+ * Création d'un banquier spécifique à notre réseau ferroviaire
+ * @param postes
+ * @return banquier*
+ */
 banquier* projet_banquier_new(dictionary_char* postes) {
     dictionary *p;
 

@@ -1,10 +1,3 @@
-/* 
- * File:   trains.h
- * Author: ludovic
- *
- * Created on 8 décembre 2011, 18:36
- */
-
 #ifndef TRAIN_H
 #define	TRAIN_H
 
