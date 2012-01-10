@@ -60,11 +60,11 @@ LDLIBSOPTIONS=-lpthread
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projet
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hassansayf
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projet: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hassansayf: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	gcc -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projet ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	gcc -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hassansayf ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/train.o: train.c 
 	${MKDIR} -p ${OBJECTDIR}
@@ -102,7 +102,7 @@ ${OBJECTDIR}/main.o: main.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projet
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/hassansayf
 
 # Subprojects
 .clean-subprojects:

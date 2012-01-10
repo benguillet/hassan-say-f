@@ -1,10 +1,3 @@
-/*
- * File:   main.c
- * Author: ludovic
- *
- * Created on 8 décembre 2011, 17:38
- */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
