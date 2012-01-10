@@ -20,13 +20,13 @@ void projet_banquier_del(banquier *self);
 int main(int argc, char* argv[]) {
     int i, nb_trains = (argc > 1 ? atoi(argv[1]) : NB_TRAINS); /* nb trains définis en paramètre ou via la constante */
     char* nom;
-    
+
     train* trains = (train*) malloc(sizeof (train) * nb_trains);
     pthread_t* trains_threads = (pthread_t*) malloc(sizeof (pthread_t) * nb_trains);
-    
+
     /* Création d'un ensemble de postes d'aiguillages spécifique à notre réseau ferroviaire (projet) */
     dictionary_char *postes_aiguillages = projet_postes_new();
-    
+
     /* Création d'un banquier spécifique à notre réseau ferroviaire (projet) */
     banquier *banquier = projet_banquier_new(postes_aiguillages);
 
@@ -56,8 +56,8 @@ int main(int argc, char* argv[]) {
 
                 break;
             case 1: /* GL */
-                nom = malloc(sizeof (char) * 7);
-                sprintf(nom, "GL %d", i);
+                nom = malloc(sizeof (char) * 8);
+                sprintf(nom, "GL  %d", i);
 
                 trains[i].nom = nom;
                 trains[i].postes = postes_aiguillages;
@@ -77,8 +77,8 @@ int main(int argc, char* argv[]) {
 
                 break;
             case 2: /* M */
-                nom = malloc(sizeof (char) * 6);
-                sprintf(nom, "M %d", i);
+                nom = malloc(sizeof (char) * 8);
+                sprintf(nom, "M   %d", i);
 
                 trains[i].nom = nom;
                 trains[i].postes = postes_aiguillages;
