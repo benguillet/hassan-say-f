@@ -147,3 +147,8 @@ char* banquier_disponibilites_tostring(banquier* self) {
 
     return str;
 }
+
+void banquier_destroy(banquier* self) {
+    pthread_mutex_destroy(&(self->mutex_modification));
+    dictionary_destroy(self->disponibilites);
+}

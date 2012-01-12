@@ -15,6 +15,7 @@ banquier* banquier_new(dictionary *disponibles);
 void banquier_lock(banquier* a, list* l);
 void banquier_unlock(banquier* a, list* l);
 char* banquier_disponibilites_tostring(banquier* self);
+void banquier_destroy(banquier* self);
 
 #endif	/* BANQUIER_H */
 

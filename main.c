@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <time.h>
+#include <math.h>
 #include "structures.h"
 #include "dictionary_char.h"
 #include "train.h"
@@ -15,7 +16,6 @@ dictionary_char* projet_postes_new(void);
 void projet_postes_del(dictionary_char* postes_aiguillages);
 
 banquier* projet_banquier_new(dictionary_char* postes);
-void projet_banquier_del(banquier *self);
 
 int main(int argc, char* argv[]) {
     int i, nb_trains = (argc > 1 ? atoi(argv[1]) : NB_TRAINS); /* nb trains définis en paramètre ou via la constante */
@@ -33,9 +33,10 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
 
     for (i = 0; i < nb_trains; ++i) {
+        nom = malloc(sizeof(char) * 15);
+
         switch (rand() % 3) {
             case 0: /* TGV */
-                nom = malloc(sizeof (char) * 8);
                 sprintf(nom, "TGV %d", i);
 
                 trains[i].nom = nom;
@@ -56,7 +57,6 @@ int main(int argc, char* argv[]) {
 
                 break;
             case 1: /* GL */
-                nom = malloc(sizeof (char) * 8);
                 sprintf(nom, "GL  %d", i);
 
                 trains[i].nom = nom;
@@ -77,7 +77,6 @@ int main(int argc, char* argv[]) {
 
                 break;
             case 2: /* M */
-                nom = malloc(sizeof (char) * 8);
                 sprintf(nom, "M   %d", i);
 
                 trains[i].nom = nom;
@@ -105,8 +104,7 @@ int main(int argc, char* argv[]) {
         pthread_join(trains_threads[i], NULL);
     }
 
-    projet_postes_del(postes_aiguillages);
-    projet_banquier_del(banquier);
+    banquier_destroy(banquier);
 
     return (EXIT_SUCCESS);
 }
@@ -181,12 +179,12 @@ void projet_postes_del(dictionary_char* self) {
     if (self == NULL)
         return;
 
-    n = e = self;
+    e = self;
 
-    while (n != NULL) {
+    while (e != NULL) {
         n = e->next;
-        dictionary_char_del((dictionary_char*) e);
-        e = e->next;
+        dictionary_char_del(e);
+        e = n;
     }
 
     dictionary_char_del(self);
@@ -231,8 +229,4 @@ banquier* projet_banquier_new(dictionary_char* postes) {
     dictionary_add(p, dictionary_char_2d_get(postes, "P3", "Ligne"), ligne);
 
     return banquier_new(p);
-}
-
-void projet_banquier_del(banquier *self) {
-    pthread_mutex_destroy(&self->mutex_modification);
 }

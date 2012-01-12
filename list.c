@@ -32,6 +32,9 @@ void liste_add(list* l, void* v) {
 void liste_del(list* l) {
     list *e, *n;
     
+    if (l== NULL)
+        return;
+    
     e = l;
     
     while (e != NULL) {

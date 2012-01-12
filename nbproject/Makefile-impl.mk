@@ -24,10 +24,10 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=HassanSayF
+PROJECTNAME=projet
 
 # Active Configuration
-DEFAULTCONF=Debug
+DEFAULTCONF=Release
 CONF=${DEFAULTCONF}
 
 # All Configurations

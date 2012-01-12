@@ -60,3 +60,18 @@ void* dictionary_get(dictionary* d, void* key) {
 
     return NULL;
 }
+
+void dictionary_destroy(dictionary* self) {
+    dictionary_element *e, *n;
+    
+    if (self == NULL)
+        return;
+        
+    e = self;
+    
+    while (e != NULL) {
+        n = e->next;
+        free(e);
+        e = n;
+    }
+}

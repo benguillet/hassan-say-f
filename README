@@ -1,0 +1,4 @@
+Depuis le répertoire courant :
+ - pour compiler le projet : make
+ - pour supprimer les builds : make clean
+ - pour lancer le projet avec NB_TRAINS (100 par defaut) : dist/Release/GNU-Linux-x86/projet [NB_TRAINS]

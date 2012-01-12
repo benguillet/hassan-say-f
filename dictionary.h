@@ -19,6 +19,7 @@ typedef dictionary_element dictionary;
 dictionary* dictionary_new(void* key, void* value);
 void dictionary_add(dictionary* dictionary, void* key, void* value);
 void* dictionary_get(dictionary* dictionary, void* key);
+void dictionary_destroy(dictionary* self);
 
 #endif	/* DICTIONARY_H */
 

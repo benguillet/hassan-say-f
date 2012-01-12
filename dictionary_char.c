@@ -83,22 +83,18 @@ void dictionary_char_set(dictionary_char* d, char* key, void* value, int free_va
 }
 
 void dictionary_char_del(dictionary_char* t) {
-/*
     dictionary_char_element *e, *n;
 
     if (t == NULL)
         return;
 
-    n = e = t;
+    e = t;
 
     while (e != NULL) {
         n = e->next;
-        free(e->key);
-        free(e->value);
         free(e);
-        e = e->next;
+        e = n;
     }
-*/
 }
 
 void* dictionary_char_2d_get(dictionary_char* d, char *key_c, char *key_l) {
